@@ -22,14 +22,16 @@ server.on('connection', (client) => {
       // fetch(splitData[1].trim(), (data) => {
       //   client.write("File: " + data);
       // });
-      let readStream = fs.createReadStream(splitData[1].trim());
+      let readStream = fs.createReadStream(splitData[1].trim(), {encoding: null, highWaterMark: 1280000000});
       readStream.on("data", (datachunk) => {
-        console.log(datachunk);
+        (Buffer.isBuffer(datachunk) ? console.log("Is buffer") : console.log("Is buffer"))
+        client.write(datachunk);
+        // console.log(datachunk);
       })
-    } else {
-      console.log('Server says: ', data)
-      // client.write('Ensure submission is in the proper format: "File: [filename]"')
-    }
+    } //ßelse {
+    //   console.log('Server says: ', data)
+    //   // client.write('Ensure submission is in the proper format: "File: [filename]"')
+    // }
   });
 });
 
