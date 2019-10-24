@@ -1,6 +1,8 @@
 const net = require('net');
 const fetch = require("./fetch");
 const checkData = require("./checkData");
+const fs = require('fs');
+
 
 const server = net.createServer();
 
@@ -17,9 +19,13 @@ server.on('connection', (client) => {
 
       splitData = data.split(" ")
 
-      fetch(splitData[1].trim(), (data) => {
-        client.write("File: " + data);
-      });
+      // fetch(splitData[1].trim(), (data) => {
+      //   client.write("File: " + data);
+      // });
+      let readStream = fs.createReadStream(splitData[1].trim());
+      readStream.on("data", (datachunk) => {
+        console.log(datachunk);
+      })
     } else {
       console.log('Server says: ', data)
       // client.write('Ensure submission is in the proper format: "File: [filename]"')
